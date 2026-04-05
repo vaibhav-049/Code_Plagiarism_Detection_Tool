@@ -12,3 +12,5 @@ test-files/
 *.log
 .DS_Store
 Thumbs.db
+
+.vite/
