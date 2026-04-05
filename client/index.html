@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CodeSentry | Premium Detector</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            mono: ['"Fira Code"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              glow: '#7c3aed', 
+              accent: '#06b6d4', 
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+        background-color: #0B0A1A;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
+        background-attachment: fixed;
+        color: #e2e8f0;
+    }
+    .glass-card {
+        background: rgba(30, 41, 59, 0.4);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+    .neon-text {
+        background: linear-gradient(to right, #a78bfa, #22d3ee);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .glow-btn:hover {
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.7);
+        transform: translateY(-2px);
+    }
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+  </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col selection:bg-purple-500 selection:text-white transition-colors duration-500">
+  
+  <nav class="border-b border-white/10 glass-card sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3 cursor-pointer group" onclick="showPage('home')">
+         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center font-extrabold text-white shadow-lg group-hover:rotate-12 transition-transform duration-300">C</div>
+         <h1 class="text-2xl font-extrabold tracking-wide text-white">Code<span class="text-cyan-400">Sentry</span></h1>
+      </div>
+      <ul class="flex space-x-8 font-semibold text-gray-300">
+        <li><a class="hover:text-purple-400 transition cursor-pointer" onclick="showPage('home')">Home</a></li>
+        <li><a class="hover:text-cyan-400 transition cursor-pointer" onclick="showPage('upload')">Analyzer</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="app-container" class="flex-grow flex flex-col justify-center items-center p-6 relative">
+    
+    <div class="fixed top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-700/20 rounded-full blur-[120px] -z-10 pointer-events-none mix-blend-screen"></div>
+    <div class="fixed bottom-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-700/20 rounded-full blur-[120px] -z-10 pointer-events-none mix-blend-screen"></div>
+
+    <section id="page-home" class="w-full max-w-5xl animate-float">
+      <div class="text-center p-14 glass-card rounded-3xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/10 to-transparent blur-3xl rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-cyan-500/10 to-transparent blur-3xl rounded-full"></div>
+        
+        <h2 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+          <span class="block text-white">Detect Plagiarism</span>
+          <span class="neon-text mt-2 block">With AI Precision</span>
+        </h2>
+        <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed font-light">
+          Experience state-of-the-art AST and token level analysis. 
+          Upload your C, C++, or Python files and let our advanced compiler pipeline uncover hidden similarities.
+        </p>
+        <div class="flex justify-center gap-6">
+            <button class="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white px-10 py-4 rounded-full font-bold shadow-lg glow-btn transition-all duration-300 transform" onclick="showPage('upload')">
+            Launch Analyzer
+            </button>
+        </div>
+      </div>
+
+      <div class="mt-16 text-left animate-[fadeIn_1s_ease-out]">
+        <div class="grid md:grid-cols-4 gap-6">
+          <div class="p-8 bg-[#14122C]/70 border border-white/5 rounded-3xl flex flex-col items-center text-center hover:bg-[#14122C] hover:-translate-y-1 transition-all duration-300">
+            <div class="w-14 h-14 mb-5 bg-[#221E45] rounded-xl flex items-center justify-center text-2xl shadow-lg">⚙️</div>
+            <h3 class="text-cyan-400 font-bold mb-3 tracking-wide">Lexical Analysis</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Source code is broken into tokens — keywords, identifiers, operators, and literals — just like a real compiler.</p>
+          </div>
+          <div class="p-8 bg-[#14122C]/70 border border-white/5 rounded-3xl flex flex-col items-center text-center hover:bg-[#14122C] hover:-translate-y-1 transition-all duration-300">
+            <div class="w-14 h-14 mb-5 bg-[#221E45] rounded-xl flex items-center justify-center text-2xl shadow-lg">🔄</div>
+            <h3 class="text-cyan-400 font-bold mb-3 tracking-wide">Normalization</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Variable names are replaced with generic placeholders so renamed copies are still detected.</p>
+          </div>
+          <div class="p-8 bg-[#14122C]/70 border border-white/5 rounded-3xl flex flex-col items-center text-center hover:bg-[#14122C] hover:-translate-y-1 transition-all duration-300">
+            <div class="w-14 h-14 mb-5 bg-[#221E45] rounded-xl flex items-center justify-center text-2xl shadow-lg">📊</div>
+            <h3 class="text-cyan-400 font-bold mb-3 tracking-wide">Multi-Metric Scoring</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Jaccard similarity, cosine similarity, and longest common subsequence are combined for accurate results.</p>
+          </div>
+          <div class="p-8 bg-[#14122C]/70 border border-white/5 rounded-3xl flex flex-col items-center text-center hover:bg-[#14122C] hover:-translate-y-1 transition-all duration-300">
+            <div class="w-14 h-14 mb-5 bg-[#221E45] rounded-xl flex items-center justify-center text-2xl shadow-lg">📝</div>
+            <h3 class="text-cyan-400 font-bold mb-3 tracking-wide">Detailed Reports</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Get a full similarity matrix, suspicious-pair highlights, and per-metric breakdowns for every file pair.</p>
+          </div>
+        </div>
+
+        <div class="mt-20 mb-8 text-center">
+          <h3 class="text-3xl font-bold text-white mb-10 tracking-widest">Compiler-Inspired Pipeline</h3>
+          <div class="flex flex-wrap justify-center items-center gap-3 md:gap-5 text-sm font-semibold">
+            <div class="bg-[#14122C] border border-white/10 px-6 py-4 rounded-2xl flex items-center gap-4 hover:border-purple-500/50 transition-colors">
+               <span class="w-7 h-7 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs shadow-[0_0_10px_purple]">1</span> 
+               <span class="text-gray-300">Upload Files</span>
+            </div>
+            <span class="text-purple-500 text-lg">→</span>
+            <div class="bg-[#14122C] border border-white/10 px-6 py-4 rounded-2xl flex items-center gap-4 hover:border-purple-500/50 transition-colors">
+               <span class="w-7 h-7 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs shadow-[0_0_10px_purple]">2</span> 
+               <span class="text-gray-300">Preprocessing</span>
+            </div>
+            <span class="text-purple-500 text-lg">→</span>
+            <div class="bg-[#14122C] border border-white/10 px-6 py-4 rounded-2xl flex items-center gap-4 hover:border-purple-500/50 transition-colors">
+               <span class="w-7 h-7 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs shadow-[0_0_10px_purple]">3</span> 
+               <span class="text-gray-300">Lexical Analysis</span>
+            </div>
+            <span class="text-purple-500 text-lg hidden md:block">→</span>
+            <div class="bg-[#14122C] border border-white/10 px-6 py-4 rounded-2xl flex items-center gap-4 hover:border-purple-500/50 transition-colors">
+               <span class="w-7 h-7 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs shadow-[0_0_10px_purple]">4</span> 
+               <span class="text-gray-300">Normalization</span>
+            </div>
+            <span class="text-purple-500 text-lg">→</span>
+            <div class="bg-[#14122C] border border-white/10 px-6 py-4 rounded-2xl flex items-center gap-4 hover:border-purple-500/50 transition-colors">
+               <span class="w-7 h-7 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs shadow-[0_0_10px_purple]">5</span> 
+               <span class="text-gray-300">Similarity Engine</span>
+            </div>
+            <span class="text-purple-500 text-lg hidden lg:block">→</span>
+            <div class="bg-[#14122C] border border-white/10 px-6 py-4 rounded-2xl flex items-center gap-4 hover:border-purple-500/50 transition-colors mx-auto lg:mx-0">
+               <span class="w-7 h-7 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs shadow-[0_0_10px_purple]">6</span> 
+               <span class="text-gray-300">Report</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload Page -->
+    <section id="page-upload" class="hidden w-full max-w-6xl">
+      <div class="glass-card p-10 rounded-3xl shadow-2xl relative">
+        <div class="mb-10 text-center relative z-10">
+            <h2 class="text-4xl font-extrabold text-white mb-3">Analysis Workspace</h2>
+            <p class="text-gray-400">Import files from your device or load preset algorithmic scenarios.</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-2 gap-10 relative z-10">
+            <div class="flex flex-col">
+                 <div id="dropzone" class="border-2 border-dashed border-purple-500/40 hover:border-cyan-400/80 rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 bg-white/[0.02] hover:bg-white/[0.05] group mb-6 relative overflow-hidden flex-shrink-0">
+                  <div class="text-6xl mb-4 transform group-hover:-translate-y-2 transition-transform duration-300 drop-shadow-2xl">📤</div>
+                  <h3 class="text-2xl font-bold text-gray-200">Drop Source Files</h3>
+                  <p class="text-cyan-400/70 mt-2 text-sm font-mono tracking-wider">.C | .CPP | .PY</p>
+                  <input type="file" id="file-input" multiple class="hidden" accept=".c,.cpp,.py">
+                  <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+                </div>
+                
+                <h4 class="font-bold text-gray-300 mb-4 flex items-center justify-between">
+                    <span>Staged Files</span>
+                    <span id="file-count-badge" class="bg-purple-600/30 text-purple-200 px-3 py-1 rounded-full text-xs border border-purple-500/50">0 files</span>
+                </h4>
+                <ul id="file-list" class="space-y-3 flex-grow max-h-48 overflow-y-auto pr-2 custom-scrollbar"></ul>
+                
+                <div id="error-message" class="hidden mt-4 bg-red-900/40 border border-red-500/50 text-red-200 px-4 py-3 rounded-xl text-sm font-medium"></div>
+
+                <button id="analyze-btn" class="w-full mt-6 bg-gradient-to-r from-purple-600/80 to-cyan-600/80 hover:from-purple-500 hover:to-cyan-500 border border-white/10 text-white py-4 rounded-xl font-bold transition-all duration-300 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed glow-btn flex items-center justify-center gap-3 text-lg">
+                  <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                  Execute Pipeline
+                </button>
+            </div>
+            
+            <div class="bg-black/30 rounded-2xl p-8 border border-white/5 shadow-inner">
+                <h3 class="font-semibold text-xl text-white mb-6 flex items-center gap-2">
+                    <span class="text-cyan-400">⚡</span> Quick Load Presets
+                </h3>
+                <div id="samples-buttons" class="flex flex-wrap gap-3 mb-6"></div>
+                
+                <div id="samples-placeholder" class="text-center py-16 px-6 border border-dashed border-white/10 rounded-xl text-gray-500 bg-white/[0.01]">
+                    Select a language preset above to explore algorithmic samples and test the engine.
+                </div>
+                <div id="samples-files" class="hidden space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar"></div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading Page -->
+    <section id="page-loading" class="hidden w-full max-w-md animate-float">
+      <div class="glass-card p-12 rounded-3xl text-center border border-cyan-500/30 relative overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.15)]">
+        <div class="absolute top-0 left-0 w-full h-1">
+            <div class="h-full bg-gradient-to-r from-purple-500 via-cyan-400 to-purple-500 w-1/2 animate-[progress_1s_ease-in-out_infinite_alternate]"></div>
+        </div>
+        
+        <div class="relative w-28 h-28 mx-auto mb-10 mt-4 text-cyan-400">
+            <svg class="absolute inset-0 w-full h-full animate-[spin_3s_linear_infinite]" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1" stroke-dasharray="10 5"></circle></svg>
+            <div class="absolute inset-2 border-4 border-t-purple-500 border-r-transparent border-b-cyan-400 border-l-transparent rounded-full animate-[spin_1s_linear_infinite_reverse]"></div>
+            <div class="absolute inset-0 flex items-center justify-center font-mono font-bold text-sm tracking-widest text-white">AST</div>
+        </div>
+        
+        <h2 class="text-2xl font-extrabold text-white mb-3 tracking-wider neon-text">Compiling Engine</h2>
+        <p class="text-cyan-200/60 font-mono text-sm leading-relaxed typing-effect" id="loading-text">
+            > Extracting Tokens...<br/>
+            > Normalizing AST...<br/>
+            > Calculating Vectors...
+        </p>
+      </div>
+    </section>
+
+    <!-- Results Page -->
+    <section id="page-results" class="hidden w-full max-w-7xl animate-[fadeIn_0.5s_ease-out]">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4 border-b border-white/10 pb-6">
+        <div>
+          <h2 class="text-4xl font-extrabold text-white mb-2 drop-shadow-md">Diagnostic Report</h2>
+          <p class="text-cyan-400/70 font-mono text-sm" id="result-session-id"></p>
+        </div>
+        <button onclick="showPage('upload')" class="bg-white/5 hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-semibold transition-all hover:border-cyan-400 flex items-center gap-2 glow-btn">
+           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+           Reset Workspace
+        </button>
+      </div>
+
+      <div id="summary-cards" class="grid grid-cols-2 md:grid-cols-5 gap-5 mb-10">
+         <!-- Rendered via JS -->
+      </div>
+
+      <div class="grid xl:grid-cols-3 gap-8">
+          <div class="xl:col-span-2 space-y-8">
+              <div id="suspicious-pairs-container" class="hidden">
+                  <h3 class="text-2xl font-bold text-red-400 mb-4 flex items-center gap-3 font-mono">
+                      <span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
+                      Critical Detections
+                  </h3>
+                  <div class="glass-card rounded-2xl overflow-hidden border border-red-500/30 bg-red-900/10">
+                      <table class="w-full text-left table-auto" id="suspicious-pairs-table">
+                          <thead class="bg-red-500/10 text-red-300 text-xs uppercase tracking-widest border-b border-red-500/20">
+                              <tr><th class="p-5">Target A</th><th class="p-5">Target B</th><th class="p-5 text-right">Confidence</th></tr>
+                          </thead>
+                          <tbody class="divide-y divide-red-500/10 text-gray-200"></tbody>
+                      </table>
+                  </div>
+              </div>
+
+              <div>
+                  <h3 class="text-xl font-bold text-gray-200 mb-4 font-mono tracking-wide">Complete Audit Trail</h3>
+                  <div class="glass-card rounded-2xl overflow-hidden border border-white/10">
+                      <table class="w-full text-left text-sm" id="all-pairs-table">
+                          <thead class="bg-black/50 text-gray-400 text-xs uppercase tracking-widest border-b border-white/10">
+                              <tr><th class="p-5">File 1</th><th class="p-5">File 2</th><th class="p-5 text-center">Score</th><th class="p-5 text-center">Status</th></tr>
+                          </thead>
+                          <tbody class="divide-y divide-white/5 text-gray-300 bg-black/20"></tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="space-y-6">
+              <div class="glass-card p-6 rounded-2xl border border-white/10 stick top-24">
+                  <h3 class="text-lg font-bold text-white mb-6 font-mono border-b border-white/10 pb-3">Similarity Matrix</h3>
+                  <div class="w-full overflow-x-auto text-xs font-mono custom-scrollbar pb-4 flex justify-center">
+                       <table class="matrix-table" id="matrix-table">
+                         <!-- JS Matrix -->
+                       </table>
+                  </div>
+                  <div class="mt-4 flex gap-4 justify-center items-center text-xs text-gray-500">
+                      <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-cyan-500/20 mix-blend-screen shadow-[0_0_5px_cyan]"></div> Low</div>
+                      <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-purple-500/50 mix-blend-screen shadow-[0_0_5px_purple]"></div> Med</div>
+                      <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-red-500 mix-blend-screen shadow-[0_0_5px_red]"></div> High</div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
