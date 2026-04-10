@@ -1,5 +1,3 @@
-
-
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
@@ -10,12 +8,12 @@ const { normalizeTokens } = require('../services/normalizer');
 const { compareAll } = require('../services/similarity');
 const { generateReport } = require('../services/reportGenerator');
 const { detectLanguage, isSupported } = require('../utils/languageDetector');
-const db = require('../db/database');
+const db = require('../db/database');
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function isValidSessionId(id) {
   return typeof id === 'string' && UUID_REGEX.test(id);
-}
+}
 function sanitizeFilename(name) {
   return path.basename(name).replace(/[^a-zA-Z0-9._-]/g, '_');
 }
@@ -29,8 +27,9 @@ async function uploadAndAnalyze(req, res) {
       });
     }
 
-    const sessionId = uuidv4();
-    db.createSession.run(sessionId, req.files.length);
+    const sessionId = uuidv4();
+    const userId = req.body.userId || null;
+    db.createSession.run(sessionId, userId, req.files.length);
 
     const fileEntries = [];
     const unsupported = [];
@@ -42,11 +41,11 @@ async function uploadAndAnalyze(req, res) {
       if (!language || !isSupported(language)) {
         unsupported.push(safeName);
         continue;
-      }
-      const rawCode = fs.readFileSync(file.path, 'utf-8');
-      const cleaned = preprocess(rawCode, language);
-      const tokens = tokenize(cleaned, language);
-      const { normalized } = normalizeTokens(tokens);
+      }
+      const rawCode = fs.readFileSync(file.path, 'utf-8');
+      const cleaned = preprocess(rawCode, language);
+      const tokens = tokenize(cleaned, language);
+      const { normalized } = normalizeTokens(tokens);
       const result = db.insertFile.run(
         sessionId,
         safeName,
@@ -59,6 +58,7 @@ async function uploadAndAnalyze(req, res) {
         id: result.lastInsertRowid,
         name: safeName,
         language,
+        code: rawCode,
         tokenCount: normalized.length,
         tokens: normalized,
       });
@@ -70,26 +70,31 @@ async function uploadAndAnalyze(req, res) {
         error: 'Need at least 2 supported files for comparison.',
         unsupported,
       });
-    }
-    const similarities = compareAll(fileEntries);
-    for (const sim of similarities) {
-      db.insertSimilarity.run(
+    }
+    
+    // Phase 2: Compute matches with AST
+    const matches = compareAll(fileEntries);
+    for (const match of matches) {
+      db.insertMatch.run(
         sessionId,
-        sim.file1Id,
-        sim.file2Id,
-        sim.file1Name,
-        sim.file2Name,
-        sim.jaccardScore,
-        sim.cosineScore,
-        sim.overallScore,
-        sim.isSuspicious ? 1 : 0,
-        sim.matchedTokens
+        match.file1Id,
+        match.file2Id,
+        match.file1Name,
+        match.file2Name,
+        match.jaccardScore, // Using jaccard mapped to lexical for now
+        match.astScore || 0,
+        0, // Semantic placeholder
+        match.overallScore,
+        match.isSuspicious ? 1 : 0,
+        match.crossLanguage ? 1 : 0,
+        JSON.stringify({ heatmap: [] })
       );
-    }
+    }
+    
     const files = db.getFilesBySession.all(sessionId);
-    const report = generateReport(sessionId, files, matches);
-    db.insertReport.run(sessionId, JSON.stringify(report));
-    db.updateSessionStatus.run('completed', sessionId);
+    const report = generateReport(sessionId, files, matches);
+    db.insertReport.run(sessionId, JSON.stringify(report));
+    db.updateSessionStatus.run('completed', sessionId);
     for (const file of req.files) {
       fs.unlink(file.path, () => {});
     }
