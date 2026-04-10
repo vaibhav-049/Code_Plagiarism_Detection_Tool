@@ -116,13 +116,13 @@ const getFilesBySession = db.prepare(
   'SELECT * FROM files WHERE sessionId = ?'
 );
 
-const insertSimilarity = db.prepare(
-  `INSERT INTO similarities (sessionId, file1Id, file2Id, file1Name, file2Name, jaccardScore, cosineScore, overallScore, isSuspicious, matchedTokens)
-   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+const insertMatch = db.prepare(
+  `INSERT INTO matches (sessionId, file1Id, file2Id, file1Name, file2Name, lexicalScore, astScore, semanticScore, overallScore, isSuspicious, crossLanguage, heatmapData)
+   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 );
 
-const getSimilaritiesBySession = db.prepare(
-  'SELECT * FROM similarities WHERE sessionId = ? ORDER BY overallScore DESC'
+const getMatchesBySession = db.prepare(
+  'SELECT * FROM matches WHERE sessionId = ? ORDER BY overallScore DESC'
 );
 
 const insertReport = db.prepare(
@@ -135,11 +135,11 @@ const getReport = db.prepare(
 
 const deleteSession = db.prepare('DELETE FROM sessions WHERE sessionId = ?');
 const deleteFiles = db.prepare('DELETE FROM files WHERE sessionId = ?');
-const deleteSimilarities = db.prepare('DELETE FROM similarities WHERE sessionId = ?');
+const deleteMatches = db.prepare('DELETE FROM matches WHERE sessionId = ?');
 const deleteReport = db.prepare('DELETE FROM reports WHERE sessionId = ?');
 
 const cleanupSession = db.transaction((sessionId) => {
-  deleteSimilarities.run(sessionId);
+  deleteMatches.run(sessionId);
   deleteFiles.run(sessionId);
   deleteReport.run(sessionId);
   deleteSession.run(sessionId);
@@ -152,8 +152,8 @@ module.exports = {
   getSession,
   insertFile,
   getFilesBySession,
-  insertSimilarity,
-  getSimilaritiesBySession,
+  insertMatch,
+  getMatchesBySession,
   insertReport,
   getReport,
   cleanupSession,

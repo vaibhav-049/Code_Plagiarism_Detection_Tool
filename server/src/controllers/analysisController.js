@@ -87,7 +87,7 @@ async function uploadAndAnalyze(req, res) {
       );
     }
     const files = db.getFilesBySession.all(sessionId);
-    const report = generateReport(sessionId, files, similarities);
+    const report = generateReport(sessionId, files, matches);
     db.insertReport.run(sessionId, JSON.stringify(report));
     db.updateSessionStatus.run('completed', sessionId);
     for (const file of req.files) {
@@ -119,11 +119,11 @@ function getResults(req, res) {
     }
 
     const files = db.getFilesBySession.all(sessionId);
-    const similarities = db.getSimilaritiesBySession.all(sessionId);
+    const matches = db.getMatchesBySession.all(sessionId);
     const reportRow = db.getReport.get(sessionId);
     const report = reportRow ? JSON.parse(reportRow.reportData) : null;
 
-    return res.json({ session, files, similarities, report });
+    return res.json({ session, files, matches, report });
   } catch (err) {
     console.error('Get results error:', err);
     return res.status(500).json({ error: 'Internal server error.' });
