@@ -1,6 +1,7 @@
 
 
 const { buildNgrams, buildFrequencyMap } = require('./normalizer');
+const { buildAST, calculateASTSimilarity } = require('./astParser');
 
 
 
@@ -121,9 +122,10 @@ function lcsSimilarity(tokensA, tokensB) {
 
 
 const WEIGHTS = {
-  jaccard: 0.35,
-  cosine: 0.35,
-  lcs: 0.30,
+  jaccard: 0.15,
+  cosine: 0.15,
+  lcs: 0.20,
+  ast: 0.50  // 50% weight for structure
 };
 
 const SUSPICIOUS_THRESHOLD = 0.60;
@@ -134,10 +136,18 @@ function comparePair(fileA, fileB) {
   const cosine = cosineSimilarity(fileA.tokens, fileB.tokens);
   const lcs = lcsSimilarity(fileA.tokens, fileB.tokens);
 
+  // Generate ASTs on the fly or pull from precomputed file parameters
+  const astA = fileA.ast ? fileA.ast : buildAST(fileA.code || '', fileA.language).ast;
+  const astB = fileB.ast ? fileB.ast : buildAST(fileB.code || '', fileB.language).ast;
+  
+  const astScore = calculateASTSimilarity(astA, astB);
+
+  // Weighted overall score
   const overall =
-    WEIGHTS.jaccard * jaccard +
-    WEIGHTS.cosine * cosine +
-    WEIGHTS.lcs * lcs;
+    (WEIGHTS.jaccard * jaccard) +
+    (WEIGHTS.cosine * cosine) +
+    (WEIGHTS.lcs * lcs) +
+    (WEIGHTS.ast * astScore);
 
   const rounded = Math.round(overall * 10000) / 10000;
 
@@ -149,9 +159,11 @@ function comparePair(fileA, fileB) {
     jaccardScore: Math.round(jaccard * 10000) / 10000,
     cosineScore: Math.round(cosine * 10000) / 10000,
     lcsScore: Math.round(lcs * 10000) / 10000,
+    astScore: Math.round(astScore * 10000) / 10000,
     overallScore: rounded,
     isSuspicious: rounded >= SUSPICIOUS_THRESHOLD,
     matchedTokens: Math.round(lcs * (fileA.tokenCount + fileB.tokenCount) / 2),
+    crossLanguage: fileA.language !== fileB.language
   };
 }
 
