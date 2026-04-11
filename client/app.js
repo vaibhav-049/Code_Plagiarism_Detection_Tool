@@ -212,6 +212,8 @@ function renderResults(sessionId, report) {
         ${statCard(formatPct(summary.averageLexical || 0), 'Avg Lexical')}
         ${statCard(formatPct(summary.averageAst || 0), 'Avg AST')}
         ${statCard(formatPct(summary.averageSemantic || 0), 'Avg Semantic')}
+        ${statCard(formatPct(summary.averageCfg || 0), 'Avg CFG')}
+        ${statCard(formatPct(summary.averageSymbol || 0), 'Avg Symbol')}
         ${statCard(formatPct(summary.maxSimilarity), 'Max Match', summary.maxSimilarity >= 0.6)}
         ${statCard(formatPct(summary.averageSimilarity), 'Avg Overall', false, summary.averageSimilarity >= 0.4)}
     `;
@@ -221,12 +223,15 @@ function renderResults(sessionId, report) {
         const tb = document.querySelector('#suspicious-pairs-table tbody');
         tb.innerHTML = '';
         suspiciousPairs.forEach(p => {
+            const copiedFnCount = (p.functionMatches || []).length;
             tb.innerHTML += `<tr class="hover:bg-red-500/10 transition-colors">
                 <td class="p-4 font-mono font-bold text-gray-200">${p.file1}</td>
                 <td class="p-4 font-mono font-bold text-gray-200">${p.file2}</td>
                 <td class="p-4 text-center text-sm text-cyan-300 font-semibold">${formatPct(p.lexical || 0)}</td>
                 <td class="p-4 text-center text-sm text-purple-300 font-semibold">${formatPct(p.ast || 0)}</td>
                 <td class="p-4 text-center text-sm text-emerald-300 font-semibold">${formatPct(p.semantic || 0)}</td>
+                <td class="p-4 text-center text-sm text-cyan-200 font-semibold">${copiedFnCount}</td>
+                <td class="p-4 text-center text-xs text-amber-300 font-semibold">${p.cloneType || 'NO_CLONE'}</td>
                 <td class="p-4 font-black font-mono text-right text-red-500 drop-shadow-[0_0_8px_red] text-lg">${formatPct(p.overall)}</td>
             </tr>`;
         });
@@ -237,6 +242,7 @@ function renderResults(sessionId, report) {
     const allTb = document.querySelector('#all-pairs-table tbody');
     allTb.innerHTML = '';
     pairs.forEach((p, idx) => {
+        const copiedFnCount = (p.functionMatches || []).length;
         let scoreCls = 'score-low';
         let badge = '<span class="status-badge-ok px-3 py-1 rounded-full text-[10px] font-black tracking-widest">CLEAN</span>';
         if(p.overall >= 0.6) {
@@ -254,6 +260,9 @@ function renderResults(sessionId, report) {
             <td class="p-4 text-center text-sm text-cyan-300 font-semibold">${formatPct(p.lexical || 0)}</td>
             <td class="p-4 text-center text-sm text-purple-300 font-semibold">${formatPct(p.ast || 0)}</td>
             <td class="p-4 text-center text-sm text-emerald-300 font-semibold">${formatPct(p.semantic || 0)}</td>
+            <td class="p-4 text-center text-sm text-teal-300 font-semibold">${formatPct(p.cfgSimilarity || 0)}</td>
+            <td class="p-4 text-center text-sm text-cyan-200 font-semibold">${copiedFnCount}</td>
+            <td class="p-4 text-center text-[11px] text-amber-300 font-semibold">${p.cloneType || 'NO_CLONE'}</td>
             <td class="p-4 text-center text-base ${scoreCls}">${formatPct(p.overall)}</td>
             <td class="p-4 text-center">${badge}</td>
         </tr>`;
@@ -305,6 +314,40 @@ window.showPairExplain = function(index) {
         const operators = pair.heatmap?.sharedOperators || [];
         const ngrams = pair.heatmap?.sharedNgrams || [];
         const flowOverlapValue = pair.heatmap?.controlFlowOverlap || 0;
+        const astView = pair.heatmap?.astView || {};
+        const compiler = pair.heatmap?.compiler || {};
+        const functionMatches = compiler.functionMatches || pair.functionMatches || [];
+        const fingerprintMap = pair.functionFingerprints || { fileA: [], fileB: [] };
+        const fingerprintA = fingerprintMap.fileA || [];
+        const fingerprintB = fingerprintMap.fileB || [];
+        const complexityA = (compiler.complexity && compiler.complexity.fileA) || (pair.complexity && pair.complexity.fileA) || {};
+        const complexityB = (compiler.complexity && compiler.complexity.fileB) || (pair.complexity && pair.complexity.fileB) || {};
+
+        const astList = (items) => {
+            if (!items || items.length === 0) return '<span class="text-gray-500">None</span>';
+            return items.map(v => `<span class="heatmap-chip heatmap-chip-ast">${v}</span>`).join('');
+        };
+
+        const astMetricBar = (label, a, b) => {
+            const max = Math.max(a || 0, b || 0, 1);
+            const aPct = ((a || 0) / max) * 100;
+            const bPct = ((b || 0) / max) * 100;
+            return `
+                <div class="space-y-1">
+                    <div class="text-xs text-gray-400">${label}</div>
+                    <div class="flex items-center gap-2">
+                        <div class="ast-mini-label text-cyan-300">A</div>
+                        <div class="heatmap-bar-track flex-1"><div class="heatmap-bar-fill heatmap-lexical" style="width:${aPct}%"></div></div>
+                        <div class="ast-mini-value">${a || 0}</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="ast-mini-label text-purple-300">B</div>
+                        <div class="heatmap-bar-track flex-1"><div class="heatmap-bar-fill heatmap-ast" style="width:${bPct}%"></div></div>
+                        <div class="ast-mini-value">${b || 0}</div>
+                    </div>
+                </div>
+            `;
+        };
 
         const renderChips = (items, chipClass) => {
             if (!items || items.length === 0) return '<span class="text-gray-500">None</span>';
@@ -331,6 +374,40 @@ window.showPairExplain = function(index) {
                     </div>
                 </div>
             `;
+        };
+
+        const renderFunctionMatches = (matches) => {
+            if (!matches || matches.length === 0) return '<span class="text-gray-500">No strong function-level fingerprint matches</span>';
+            return matches.slice(0, 6).map(m => `
+                <div class="bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-xs space-y-2">
+                    <div>
+                        <span class="text-cyan-300 font-mono">${m.functionA}</span>
+                        <span class="text-gray-500"> ↔ </span>
+                        <span class="text-purple-300 font-mono">${m.functionB}</span>
+                        <span class="text-amber-300 ml-2">${(Number(m.score || 0) * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="flex flex-wrap gap-1">
+                        ${m.exactHashMatch ? '<span class="hash-badge hash-badge-token">TOKEN HASH MATCH</span>' : ''}
+                        ${m.cfgHashMatch ? '<span class="hash-badge hash-badge-cfg">CFG HASH MATCH</span>' : ''}
+                        ${(m.astHashA && m.astHashB && m.astHashA === m.astHashB) ? '<span class="hash-badge hash-badge-ast">AST HASH MATCH</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        const shortHash = (value) => value ? String(value).slice(0, 10) : 'n/a';
+
+        const renderFingerprintList = (items) => {
+            if (!items || items.length === 0) return '<span class="text-gray-500">No function fingerprints extracted</span>';
+            return items.slice(0, 6).map(fn => `
+                <div class="fingerprint-card">
+                    <div class="text-cyan-200 font-mono text-xs mb-1">${fn.name || 'unknown_fn'}</div>
+                    <div class="text-[11px] text-gray-400 font-mono">sig: ${shortHash(fn.signatureHash)}</div>
+                    <div class="text-[11px] text-gray-400 font-mono">tok: ${shortHash(fn.tokenHash)}</div>
+                    <div class="text-[11px] text-gray-400 font-mono">ast: ${shortHash(fn.astHash)}</div>
+                    <div class="text-[11px] text-gray-400 font-mono">cfg: ${shortHash(fn.cfgHash)}</div>
+                </div>
+            `).join('');
         };
 
         panel.innerHTML = `
@@ -365,6 +442,68 @@ window.showPairExplain = function(index) {
                     <span class="text-gray-400">Control-flow overlap:</span>
                     <span class="font-mono text-white"> ${(flowOverlapValue * 100).toFixed(1)}%</span>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    ${renderBar('CFG similarity', pair.cfgSimilarity || compiler.cfgSimilarity || 0, 'heatmap-semantic')}
+                    ${renderBar('Symbol similarity', pair.symbolSimilarity || compiler.symbolSimilarity || 0, 'heatmap-ast')}
+                    <div class="space-y-1">
+                        <div class="text-xs text-gray-400">Clone type</div>
+                        <div class="text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2 inline-block">
+                            ${pair.cloneType || compiler.cloneType || 'NO_CLONE'}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-xs uppercase tracking-wider text-gray-400">Function fingerprint matches</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">${renderFunctionMatches(functionMatches)}</div>
+                </div>
+
+                <div class="space-y-3 ast-diff-wrap">
+                    <p class="text-xs uppercase tracking-wider text-gray-400">Function fingerprint inventory</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="ast-diff-card">
+                            <p class="ast-diff-title">${pair.file1} fingerprints</p>
+                            <div class="space-y-2">${renderFingerprintList(fingerprintA)}</div>
+                        </div>
+                        <div class="ast-diff-card">
+                            <p class="ast-diff-title">${pair.file2} fingerprints</p>
+                            <div class="space-y-2">${renderFingerprintList(fingerprintB)}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3 ast-diff-wrap">
+                    <p class="text-xs uppercase tracking-wider text-gray-400">Complexity comparison</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${astMetricBar('Cyclomatic Complexity', complexityA.cyclomatic || 0, complexityB.cyclomatic || 0)}
+                        ${astMetricBar('Loop Count', complexityA.loopCount || 0, complexityB.loopCount || 0)}
+                        ${astMetricBar('Nesting Depth', complexityA.nestingDepth || 0, complexityB.nestingDepth || 0)}
+                        ${astMetricBar('Loop Density (x1000)', Math.round((complexityA.loopDensity || 0) * 1000), Math.round((complexityB.loopDensity || 0) * 1000))}
+                    </div>
+                </div>
+
+                <div class="space-y-3 ast-diff-wrap">
+                    <p class="text-xs uppercase tracking-wider text-gray-400">AST Diff Viewer</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="ast-diff-card">
+                            <p class="ast-diff-title">Shared control flow</p>
+                            <div class="heatmap-chip-wrap">${astList(astView.sharedFlow)}</div>
+                        </div>
+                        <div class="ast-diff-card">
+                            <p class="ast-diff-title">Only in ${pair.file1}</p>
+                            <div class="heatmap-chip-wrap">${astList(astView.onlyA)}</div>
+                        </div>
+                        <div class="ast-diff-card md:col-span-2">
+                            <p class="ast-diff-title">Only in ${pair.file2}</p>
+                            <div class="heatmap-chip-wrap">${astList(astView.onlyB)}</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${astMetricBar('AST Max Depth', astView.depthA, astView.depthB)}
+                        ${astMetricBar('AST Block Count', astView.blockA, astView.blockB)}
+                    </div>
+                </div>
             </div>
         `;
 };
@@ -384,6 +523,11 @@ window.exportExplainabilityReport = function() {
             overall: p.overall,
             suspicious: p.suspicious,
             crossLanguage: p.crossLanguage,
+            cloneType: p.cloneType,
+            cfgSimilarity: p.cfgSimilarity,
+            symbolSimilarity: p.symbolSimilarity,
+            functionMatches: p.functionMatches,
+            complexity: p.complexity,
             explanation: p.explanation,
             heatmap: p.heatmap,
         })),

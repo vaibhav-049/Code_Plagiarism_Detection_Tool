@@ -2,6 +2,7 @@
 
 const { buildNgrams, buildFrequencyMap } = require('./normalizer');
 const { buildAST, calculateASTSimilarity } = require('./astParser');
+const { analyzeCompilerFeatures } = require('./compilerFeatures');
 
 
 
@@ -269,6 +270,16 @@ function explainPair(match) {
   if (match.semanticScore >= 0.7) notes.push('Semantic heuristic indicates similar logic flow.');
   else if (match.semanticScore <= 0.35) notes.push('Semantic heuristic indicates low logical overlap.');
 
+  if (match.compiler?.cloneType && match.compiler.cloneType !== 'NO_CLONE') {
+    notes.push(`Clone class detected: ${match.compiler.cloneType}.`);
+  }
+  if (typeof match.compiler?.cfgSimilarity === 'number') {
+    notes.push(`CFG similarity: ${(match.compiler.cfgSimilarity * 100).toFixed(1)}%.`);
+  }
+  if (typeof match.compiler?.symbolSimilarity === 'number') {
+    notes.push(`Symbol/scope similarity: ${(match.compiler.symbolSimilarity * 100).toFixed(1)}%.`);
+  }
+
   if (notes.length === 0) notes.push('Mixed signals across lexical, AST, and semantic metrics.');
   return notes.join(' ');
 }
@@ -282,6 +293,17 @@ function buildHeatmapData(fileA, fileB) {
   const flowB = canonicalControlFlow(fileB);
   const flowOverlap = arrayMultisetSimilarity(flowA, flowB);
 
+  const setA = new Set(flowA);
+  const setB = new Set(flowB);
+  const sharedFlow = [...setA].filter((item) => setB.has(item));
+  const onlyA = [...setA].filter((item) => !setB.has(item));
+  const onlyB = [...setB].filter((item) => !setA.has(item));
+
+  const depthA = fileA.astMeta?.maxDepth || 0;
+  const depthB = fileB.astMeta?.maxDepth || 0;
+  const blockA = fileA.astMeta?.blockCount || 0;
+  const blockB = fileB.astMeta?.blockCount || 0;
+
   return {
     sharedKeywords,
     sharedOperators,
@@ -289,6 +311,17 @@ function buildHeatmapData(fileA, fileB) {
     controlFlowOverlap: Math.round(flowOverlap * 10000) / 10000,
     tokenCountA: fileA.tokenCount,
     tokenCountB: fileB.tokenCount,
+    astView: {
+      sharedFlow,
+      onlyA,
+      onlyB,
+      sequenceA: flowA,
+      sequenceB: flowB,
+      depthA,
+      depthB,
+      blockA,
+      blockB,
+    },
   };
 }
 
@@ -351,6 +384,15 @@ function comparePair(fileA, fileB) {
     matchedTokens: Math.round(lcs * (fileA.tokenCount + fileB.tokenCount) / 2),
     crossLanguage: isCrossLanguage,
     heatmapData,
+  };
+
+  result.compiler = analyzeCompilerFeatures(fileA, fileB, result);
+  result.heatmapData.compiler = {
+    cfgSimilarity: result.compiler.cfgSimilarity,
+    symbolSimilarity: result.compiler.symbolSimilarity,
+    cloneType: result.compiler.cloneType,
+    functionMatches: result.compiler.functionFingerprints.matches,
+    complexity: result.compiler.complexity,
   };
 
   result.explanation = explainPair(result);

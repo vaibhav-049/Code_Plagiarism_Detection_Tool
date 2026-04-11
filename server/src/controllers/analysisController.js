@@ -64,6 +64,7 @@ async function uploadAndAnalyze(req, res) {
         tokenCount: normalized.length,
         ast: astResult.ast,
         astMeta: astResult.metadata,
+        rawTokens: tokens,
         tokens: normalized,
       });
     }

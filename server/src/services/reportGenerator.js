@@ -22,6 +22,8 @@ function generateReport(sessionId, files, results, fileMetaMap = {}) {
   const lexicalScores = results.map(r => r.lexicalScore || 0);
   const astScores = results.map(r => r.astScore || 0);
   const semanticScores = results.map(r => r.semanticScore || 0);
+  const cfgScores = results.map(r => r.compiler?.cfgSimilarity || 0);
+  const symbolScores = results.map(r => r.compiler?.symbolSimilarity || 0);
   const avgScore = scores.length
     ? scores.reduce((a, b) => a + b, 0) / scores.length
     : 0;
@@ -33,6 +35,12 @@ function generateReport(sessionId, files, results, fileMetaMap = {}) {
     : 0;
   const avgSemantic = semanticScores.length
     ? semanticScores.reduce((a, b) => a + b, 0) / semanticScores.length
+    : 0;
+  const avgCfg = cfgScores.length
+    ? cfgScores.reduce((a, b) => a + b, 0) / cfgScores.length
+    : 0;
+  const avgSymbol = symbolScores.length
+    ? symbolScores.reduce((a, b) => a + b, 0) / symbolScores.length
     : 0;
   const maxScore = scores.length ? Math.max(...scores) : 0;
   const minScore = scores.length ? Math.min(...scores) : 0;
@@ -49,6 +57,8 @@ function generateReport(sessionId, files, results, fileMetaMap = {}) {
       averageLexical: Math.round(avgLexical * 10000) / 10000,
       averageAst: Math.round(avgAst * 10000) / 10000,
       averageSemantic: Math.round(avgSemantic * 10000) / 10000,
+      averageCfg: Math.round(avgCfg * 10000) / 10000,
+      averageSymbol: Math.round(avgSymbol * 10000) / 10000,
       maxSimilarity: Math.round(maxScore * 10000) / 10000,
       minSimilarity: Math.round(minScore * 10000) / 10000,
     },
@@ -71,6 +81,27 @@ function generateReport(sessionId, files, results, fileMetaMap = {}) {
       overall: r.overallScore,
       suspicious: r.isSuspicious,
       crossLanguage: Boolean(r.crossLanguage),
+      cloneType: r.compiler?.cloneType || 'NO_CLONE',
+      cfgSimilarity: r.compiler?.cfgSimilarity || 0,
+      symbolSimilarity: r.compiler?.symbolSimilarity || 0,
+      functionMatches: r.compiler?.functionFingerprints?.matches || [],
+      functionFingerprints: {
+        fileA: (r.compiler?.functionFingerprints?.fileA || []).map(fn => ({
+          name: fn.name,
+          signatureHash: fn.signatureHash,
+          tokenHash: fn.tokenHash,
+          astHash: fn.astHash,
+          cfgHash: fn.cfgHash,
+        })),
+        fileB: (r.compiler?.functionFingerprints?.fileB || []).map(fn => ({
+          name: fn.name,
+          signatureHash: fn.signatureHash,
+          tokenHash: fn.tokenHash,
+          astHash: fn.astHash,
+          cfgHash: fn.cfgHash,
+        })),
+      },
+      complexity: r.compiler?.complexity || {},
       matchedTokens: r.matchedTokens,
       explanation: r.explanation || '',
       heatmap: r.heatmapData || {},
@@ -86,6 +117,11 @@ function generateReport(sessionId, files, results, fileMetaMap = {}) {
       cosine: r.cosineScore,
       lcs: r.lcsScore,
       crossLanguage: Boolean(r.crossLanguage),
+      cloneType: r.compiler?.cloneType || 'NO_CLONE',
+      cfgSimilarity: r.compiler?.cfgSimilarity || 0,
+      symbolSimilarity: r.compiler?.symbolSimilarity || 0,
+      functionMatches: r.compiler?.functionFingerprints?.matches || [],
+      complexity: r.compiler?.complexity || {},
       explanation: r.explanation || '',
       heatmap: r.heatmapData || {},
     })),
