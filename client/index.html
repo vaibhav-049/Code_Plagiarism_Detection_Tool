@@ -265,25 +265,29 @@
                       <span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
                       Critical Detections
                   </h3>
-                  <div class="glass-card rounded-2xl overflow-hidden border border-red-500/30 bg-red-900/10">
-                      <table class="w-full text-left table-auto" id="suspicious-pairs-table">
+                    <div class="glass-card rounded-2xl border border-red-500/30 bg-red-900/10">
+                      <div class="overflow-x-auto custom-scrollbar">
+                      <table class="min-w-[980px] w-full text-left table-auto" id="suspicious-pairs-table">
                           <thead class="bg-red-500/10 text-red-300 text-xs uppercase tracking-widest border-b border-red-500/20">
                             <tr><th class="p-5">Target A</th><th class="p-5">Target B</th><th class="p-5 text-center">Lexical</th><th class="p-5 text-center">AST</th><th class="p-5 text-center">Semantic</th><th class="p-5 text-center">Copied Fn</th><th class="p-5 text-center">Clone Type</th><th class="p-5 text-right">Overall</th></tr>
                           </thead>
                           <tbody class="divide-y divide-red-500/10 text-gray-200"></tbody>
                       </table>
+                      </div>
                   </div>
               </div>
 
               <div>
                   <h3 class="text-xl font-bold text-gray-200 mb-4 font-mono tracking-wide">Complete Audit Trail</h3>
-                  <div class="glass-card rounded-2xl overflow-hidden border border-white/10">
-                      <table class="w-full text-left text-sm" id="all-pairs-table">
+                    <div class="glass-card rounded-2xl border border-white/10">
+                      <div class="overflow-x-auto custom-scrollbar">
+                      <table class="min-w-[1120px] w-full text-left text-sm" id="all-pairs-table">
                           <thead class="bg-black/50 text-gray-400 text-xs uppercase tracking-widest border-b border-white/10">
                           <tr><th class="p-5">File 1</th><th class="p-5">File 2</th><th class="p-5 text-center">Lexical</th><th class="p-5 text-center">AST</th><th class="p-5 text-center">Semantic</th><th class="p-5 text-center">CFG</th><th class="p-5 text-center">Copied Fn</th><th class="p-5 text-center">Clone Type</th><th class="p-5 text-center">Overall</th><th class="p-5 text-center">Status</th></tr>
                           </thead>
                           <tbody class="divide-y divide-white/5 text-gray-300 bg-black/20"></tbody>
                       </table>
+                      </div>
                   </div>
               </div>
 
