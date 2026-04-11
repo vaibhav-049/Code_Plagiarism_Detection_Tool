@@ -4,7 +4,8 @@ const { SUSPICIOUS_THRESHOLD } = require('./similarity');
 
 
 function generateReport(sessionId, files, results) {
-  const suspicious = results.filter(r => r.isSuspicious);
+  const suspicious = results.filter(r => r.isSuspicious);
+
   const matrix = {};
   for (const f of files) {
     matrix[f.fileName] = {};
@@ -15,7 +16,8 @@ function generateReport(sessionId, files, results) {
   for (const r of results) {
     matrix[r.file1Name][r.file2Name] = r.overallScore;
     matrix[r.file2Name][r.file1Name] = r.overallScore;
-  }
+  }
+
   const scores = results.map(r => r.overallScore);
   const avgScore = scores.length
     ? scores.reduce((a, b) => a + b, 0) / scores.length
@@ -44,20 +46,26 @@ function generateReport(sessionId, files, results) {
     pairs: results.map(r => ({
       file1: r.file1Name,
       file2: r.file2Name,
+      lexical: r.lexicalScore,
       jaccard: r.jaccardScore,
       cosine: r.cosineScore,
       lcs: r.lcsScore,
+      ast: r.astScore,
       overall: r.overallScore,
       suspicious: r.isSuspicious,
+      crossLanguage: Boolean(r.crossLanguage),
       matchedTokens: r.matchedTokens,
     })),
     suspiciousPairs: suspicious.map(r => ({
       file1: r.file1Name,
       file2: r.file2Name,
       overall: r.overallScore,
+      lexical: r.lexicalScore,
+      ast: r.astScore,
       jaccard: r.jaccardScore,
       cosine: r.cosineScore,
       lcs: r.lcsScore,
+      crossLanguage: Boolean(r.crossLanguage),
     })),
     matrix,
   };

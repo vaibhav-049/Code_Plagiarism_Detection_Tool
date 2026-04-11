@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const { preprocess } = require('../services/preprocessor');
 const { tokenize } = require('../services/tokenizer');
 const { normalizeTokens } = require('../services/normalizer');
+const { buildAST } = require('../services/astParser');
 const { compareAll } = require('../services/similarity');
 const { generateReport } = require('../services/reportGenerator');
 const { detectLanguage, isSupported } = require('../utils/languageDetector');
@@ -46,6 +47,7 @@ async function uploadAndAnalyze(req, res) {
       const cleaned = preprocess(rawCode, language);
       const tokens = tokenize(cleaned, language);
       const { normalized } = normalizeTokens(tokens);
+      const astResult = buildAST(cleaned, language);
       const result = db.insertFile.run(
         sessionId,
         safeName,
@@ -60,6 +62,8 @@ async function uploadAndAnalyze(req, res) {
         language,
         code: rawCode,
         tokenCount: normalized.length,
+        ast: astResult.ast,
+        astMeta: astResult.metadata,
         tokens: normalized,
       });
     }
@@ -81,7 +85,7 @@ async function uploadAndAnalyze(req, res) {
         match.file2Id,
         match.file1Name,
         match.file2Name,
-        match.jaccardScore, // Using jaccard mapped to lexical for now
+        match.lexicalScore,
         match.astScore || 0,
         0, // Semantic placeholder
         match.overallScore,

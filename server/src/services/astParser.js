@@ -7,7 +7,7 @@ const { tokenize } = require('./tokenizer');
  */
 function buildAST(code, language) {
   const tokens = tokenize(code, language);
-  const root = { type: 'Program', depth: 0, children: [], functions: [] };
+  const root = { type: 'Program', depth: 0, children: [], functions: [], weight: 0 };
   let currentScope = root;
   const scopeStack = [root];
 
@@ -51,41 +51,98 @@ function buildAST(code, language) {
     }
   }
 
-  return { ast: root, totalTokens: tokens.length };
+  const metadata = extractAstMetadata(root);
+  return { ast: root, totalTokens: tokens.length, metadata };
+}
+
+function extractAstMetadata(ast) {
+  const controlFlow = [];
+  let blockCount = 0;
+  let nodeCount = 0;
+  let maxDepth = 0;
+
+  function walk(node, depth) {
+    if (!node) return;
+    nodeCount++;
+    if (depth > maxDepth) maxDepth = depth;
+
+    if (node.type === 'Block') blockCount++;
+    if (node.type === 'ControlFlow' && node.value) controlFlow.push(node.value);
+
+    if (node.children && node.children.length > 0) {
+      for (const child of node.children) {
+        walk(child, depth + 1);
+      }
+    }
+  }
+
+  walk(ast, 0);
+
+  return {
+    nodeCount,
+    blockCount,
+    maxDepth,
+    controlFlow,
+  };
+}
+
+function countMap(items) {
+  const map = new Map();
+  for (const item of items) {
+    map.set(item, (map.get(item) || 0) + 1);
+  }
+  return map;
+}
+
+function multisetJaccard(itemsA, itemsB) {
+  const a = countMap(itemsA);
+  const b = countMap(itemsB);
+  const keys = new Set([...a.keys(), ...b.keys()]);
+
+  if (keys.size === 0) return 0;
+
+  let intersection = 0;
+  let union = 0;
+
+  for (const key of keys) {
+    const av = a.get(key) || 0;
+    const bv = b.get(key) || 0;
+    intersection += Math.min(av, bv);
+    union += Math.max(av, bv);
+  }
+
+  return union === 0 ? 0 : intersection / union;
+}
+
+function ratioSimilarity(a, b) {
+  if (a === 0 && b === 0) return 1;
+  const max = Math.max(a, b);
+  if (max === 0) return 1;
+  return 1 - Math.abs(a - b) / max;
 }
 
 /**
  * Calculates a semantic structural similarity between two trees
  */
 function calculateASTSimilarity(astA, astB) {
-  function getFingerprint(node) {
-    let fp = [];
-    if (node.type === 'ControlFlow') fp.push(node.value);
-    if (node.children) {
-      for (const child of node.children) {
-        fp = fp.concat(getFingerprint(child));
-      }
-    }
-    return fp;
+  const metaA = extractAstMetadata(astA);
+  const metaB = extractAstMetadata(astB);
+
+  const flowScore = multisetJaccard(metaA.controlFlow, metaB.controlFlow);
+  const depthScore = ratioSimilarity(metaA.maxDepth, metaB.maxDepth);
+  const blockScore = ratioSimilarity(metaA.blockCount, metaB.blockCount);
+  const nodeScore = ratioSimilarity(metaA.nodeCount, metaB.nodeCount);
+
+  let score;
+  if (metaA.controlFlow.length === 0 && metaB.controlFlow.length === 0) {
+    score = 0.5 * depthScore + 0.3 * blockScore + 0.2 * nodeScore;
+  } else {
+    score = 0.55 * flowScore + 0.2 * depthScore + 0.15 * blockScore + 0.1 * nodeScore;
   }
 
-  const fpA = getFingerprint(astA);
-  const fpB = getFingerprint(astB);
-
-  // Compute Jaccard on Control Flow Fingerprints
-  const setA = new Set(fpA);
-  const setB = new Set(fpB);
-  
-  if (setA.size === 0 && setB.size === 0) return 1;
-  if (setA.size === 0 || setB.size === 0) return 0;
-
-  let intersection = 0;
-  for (const item of setA) {
-    if (setB.has(item)) intersection++;
-  }
-
-  const union = setA.size + setB.size - intersection;
-  return intersection / union;
+  if (score < 0) return 0;
+  if (score > 1) return 1;
+  return score;
 }
 
 module.exports = { buildAST, calculateASTSimilarity };
