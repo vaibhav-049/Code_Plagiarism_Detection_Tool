@@ -1,47 +1,108 @@
+const { spawnSync } = require('child_process');
 const { tokenize } = require('./tokenizer');
 
-/**
- * Fallback AST Parser
- * Note: Since tree-sitter couldn't compile natively (node-gyp error),
- * we fall back to a custom hierarchical scope-based semantic parser.
- */
 function buildAST(code, language) {
+  const lang = String(language || '').toLowerCase();
+
+  if (lang === 'python') {
+    const parsed = buildPythonAst(code);
+    if (parsed) return parsed;
+  }
+
+  return buildHeuristicAst(code, lang);
+}
+
+function buildPythonAst(code) {
+  const script = [
+    'import ast, json, sys',
+    'code = sys.stdin.read()',
+    'tree = ast.parse(code)',
+    'counts = {"If":0,"For":0,"While":0,"Try":0,"With":0,"FunctionDef":0,"ClassDef":0}',
+    'nodes = 0',
+    'max_depth = 0',
+    'block_count = 0',
+    'flow = []',
+    'flow_map = {"If":"if","For":"for","While":"while","Try":"try","With":"with"}',
+    'def walk(node, depth=0):',
+    '    global nodes, max_depth, block_count',
+    '    nodes += 1',
+    '    if depth > max_depth: max_depth = depth',
+    '    name = type(node).__name__',
+    '    if name in counts: counts[name] += 1',
+    '    if name in flow_map: flow.append(flow_map[name])',
+    '    if name in ("If", "For", "While", "Try", "With", "FunctionDef", "ClassDef"): block_count += 1',
+    '    for child in ast.iter_child_nodes(node): walk(child, depth + 1)',
+    'walk(tree)',
+    'print(json.dumps({"counts": counts, "nodes": nodes, "max_depth": max_depth, "block_count": block_count, "flow": flow}))',
+  ].join('\n');
+
+  const proc = spawnSync('python', ['-c', script], {
+    input: code,
+    encoding: 'utf-8',
+    timeout: 5000,
+  });
+
+  if (proc.status !== 0 || !proc.stdout) return null;
+
+  try {
+    const data = JSON.parse(proc.stdout.trim());
+    const root = { type: 'Program', depth: 0, children: [], functions: [], weight: 0 };
+
+    for (const value of data.flow || []) {
+      root.children.push({ type: 'ControlFlow', value, weight: 5 });
+      root.weight += 5;
+    }
+
+    root.children.push({ type: 'Node', token: { type: 'FUNCTIONS', value: String(data.counts?.FunctionDef || 0) }, weight: 1 });
+    root.children.push({ type: 'Node', token: { type: 'CLASSES', value: String(data.counts?.ClassDef || 0) }, weight: 1 });
+    root.weight += 2;
+
+    return {
+      ast: root,
+      totalTokens: data.nodes || 0,
+      metadata: {
+        nodeCount: data.nodes || 0,
+        blockCount: data.block_count || 0,
+        maxDepth: data.max_depth || 0,
+        controlFlow: Array.isArray(data.flow) ? data.flow : [],
+        parserSource: 'python-ast',
+      },
+    };
+  } catch (_err) {
+    return null;
+  }
+}
+
+function buildHeuristicAst(code, language) {
   const tokens = tokenize(code, language);
   const root = { type: 'Program', depth: 0, children: [], functions: [], weight: 0 };
   let currentScope = root;
   const scopeStack = [root];
 
-  // Helper to detect functions based on keywords and parens
-  let inFunctionDecl = false;
-
   for (let i = 0; i < tokens.length; i++) {
     const t = tokens[i];
-    
-    // C-style Block Scoping
+
     if (t.type === 'DELIMITER' && t.value === '{') {
       const parent = scopeStack[scopeStack.length - 1];
-      const newScope = { 
-        type: 'Block', 
-        depth: parent.depth + 1, 
+      const newScope = {
+        type: 'Block',
+        depth: parent.depth + 1,
         children: [],
-        weight: 0 
+        weight: 0,
       };
       parent.children.push(newScope);
       scopeStack.push(newScope);
       currentScope = newScope;
-    } 
-    else if (t.type === 'DELIMITER' && t.value === '}') {
+    } else if (t.type === 'DELIMITER' && t.value === '}') {
       if (scopeStack.length > 1) {
         scopeStack.pop();
         currentScope = scopeStack[scopeStack.length - 1];
       }
-    } 
-    else {
-      // We weight certain logical patterns heavier for CFG comparison
+    } else {
       let weight = 1;
       if (t.type === 'KEYWORD') {
-        if (['for', 'while', 'if', 'else', 'switch'].includes(t.value)) {
-          weight = 5; // Control flow altering
+        if (['for', 'while', 'if', 'else', 'switch', 'case'].includes(t.value)) {
+          weight = 5;
           currentScope.children.push({ type: 'ControlFlow', value: t.value, weight });
           continue;
         }
@@ -52,6 +113,7 @@ function buildAST(code, language) {
   }
 
   const metadata = extractAstMetadata(root);
+  metadata.parserSource = 'heuristic';
   return { ast: root, totalTokens: tokens.length, metadata };
 }
 

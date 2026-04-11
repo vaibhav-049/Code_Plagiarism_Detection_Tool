@@ -242,13 +242,19 @@
           <h2 class="text-4xl font-extrabold text-white mb-2 drop-shadow-md">Diagnostic Report</h2>
           <p class="text-cyan-400/70 font-mono text-sm" id="result-session-id"></p>
         </div>
-        <button onclick="showPage('upload')" class="bg-white/5 hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-semibold transition-all hover:border-cyan-400 flex items-center gap-2 glow-btn">
-           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
-           Reset Workspace
-        </button>
+        <div class="flex gap-3">
+          <button onclick="exportExplainabilityReport()" class="bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-200 px-5 py-3 rounded-xl font-semibold transition-all flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-8m0 8l-3-3m3 3l3-3M4 18h16"></path></svg>
+            Export Explain
+          </button>
+          <button onclick="showPage('upload')" class="bg-white/5 hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-semibold transition-all hover:border-cyan-400 flex items-center gap-2 glow-btn">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+            Reset Workspace
+          </button>
+        </div>
       </div>
 
-      <div id="summary-cards" class="grid grid-cols-2 md:grid-cols-5 gap-5 mb-10">
+      <div id="summary-cards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-5 mb-10">
          <!-- Rendered via JS -->
       </div>
 
@@ -262,7 +268,7 @@
                   <div class="glass-card rounded-2xl overflow-hidden border border-red-500/30 bg-red-900/10">
                       <table class="w-full text-left table-auto" id="suspicious-pairs-table">
                           <thead class="bg-red-500/10 text-red-300 text-xs uppercase tracking-widest border-b border-red-500/20">
-                              <tr><th class="p-5">Target A</th><th class="p-5">Target B</th><th class="p-5 text-right">Confidence</th></tr>
+                            <tr><th class="p-5">Target A</th><th class="p-5">Target B</th><th class="p-5 text-center">Lexical</th><th class="p-5 text-center">AST</th><th class="p-5 text-center">Semantic</th><th class="p-5 text-right">Overall</th></tr>
                           </thead>
                           <tbody class="divide-y divide-red-500/10 text-gray-200"></tbody>
                       </table>
@@ -274,12 +280,19 @@
                   <div class="glass-card rounded-2xl overflow-hidden border border-white/10">
                       <table class="w-full text-left text-sm" id="all-pairs-table">
                           <thead class="bg-black/50 text-gray-400 text-xs uppercase tracking-widest border-b border-white/10">
-                              <tr><th class="p-5">File 1</th><th class="p-5">File 2</th><th class="p-5 text-center">Score</th><th class="p-5 text-center">Status</th></tr>
+                          <tr><th class="p-5">File 1</th><th class="p-5">File 2</th><th class="p-5 text-center">Lexical</th><th class="p-5 text-center">AST</th><th class="p-5 text-center">Semantic</th><th class="p-5 text-center">Overall</th><th class="p-5 text-center">Status</th></tr>
                           </thead>
                           <tbody class="divide-y divide-white/5 text-gray-300 bg-black/20"></tbody>
                       </table>
                   </div>
               </div>
+
+                <div>
+                  <h3 class="text-xl font-bold text-gray-200 mb-4 font-mono tracking-wide">Pair Explainability</h3>
+                  <div id="explain-panel" class="glass-card rounded-2xl border border-white/10 p-5 text-sm text-gray-300">
+                    <p class="text-gray-500">Select a pair from the audit table to see why it was scored that way.</p>
+                  </div>
+                </div>
           </div>
           
           <div class="space-y-6">

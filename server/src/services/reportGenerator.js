@@ -3,7 +3,7 @@
 const { SUSPICIOUS_THRESHOLD } = require('./similarity');
 
 
-function generateReport(sessionId, files, results) {
+function generateReport(sessionId, files, results, fileMetaMap = {}) {
   const suspicious = results.filter(r => r.isSuspicious);
 
   const matrix = {};
@@ -19,8 +19,20 @@ function generateReport(sessionId, files, results) {
   }
 
   const scores = results.map(r => r.overallScore);
+  const lexicalScores = results.map(r => r.lexicalScore || 0);
+  const astScores = results.map(r => r.astScore || 0);
+  const semanticScores = results.map(r => r.semanticScore || 0);
   const avgScore = scores.length
     ? scores.reduce((a, b) => a + b, 0) / scores.length
+    : 0;
+  const avgLexical = lexicalScores.length
+    ? lexicalScores.reduce((a, b) => a + b, 0) / lexicalScores.length
+    : 0;
+  const avgAst = astScores.length
+    ? astScores.reduce((a, b) => a + b, 0) / astScores.length
+    : 0;
+  const avgSemantic = semanticScores.length
+    ? semanticScores.reduce((a, b) => a + b, 0) / semanticScores.length
     : 0;
   const maxScore = scores.length ? Math.max(...scores) : 0;
   const minScore = scores.length ? Math.min(...scores) : 0;
@@ -34,6 +46,9 @@ function generateReport(sessionId, files, results) {
       suspiciousPairs: suspicious.length,
       threshold: SUSPICIOUS_THRESHOLD,
       averageSimilarity: Math.round(avgScore * 10000) / 10000,
+      averageLexical: Math.round(avgLexical * 10000) / 10000,
+      averageAst: Math.round(avgAst * 10000) / 10000,
+      averageSemantic: Math.round(avgSemantic * 10000) / 10000,
       maxSimilarity: Math.round(maxScore * 10000) / 10000,
       minSimilarity: Math.round(minScore * 10000) / 10000,
     },
@@ -42,6 +57,7 @@ function generateReport(sessionId, files, results) {
       name: f.fileName,
       language: f.language,
       tokens: f.tokenCount,
+      astParser: fileMetaMap[f.fileName]?.parserSource || 'unknown',
     })),
     pairs: results.map(r => ({
       file1: r.file1Name,
@@ -51,10 +67,13 @@ function generateReport(sessionId, files, results) {
       cosine: r.cosineScore,
       lcs: r.lcsScore,
       ast: r.astScore,
+      semantic: r.semanticScore,
       overall: r.overallScore,
       suspicious: r.isSuspicious,
       crossLanguage: Boolean(r.crossLanguage),
       matchedTokens: r.matchedTokens,
+      explanation: r.explanation || '',
+      heatmap: r.heatmapData || {},
     })),
     suspiciousPairs: suspicious.map(r => ({
       file1: r.file1Name,
@@ -62,10 +81,13 @@ function generateReport(sessionId, files, results) {
       overall: r.overallScore,
       lexical: r.lexicalScore,
       ast: r.astScore,
+      semantic: r.semanticScore,
       jaccard: r.jaccardScore,
       cosine: r.cosineScore,
       lcs: r.lcsScore,
       crossLanguage: Boolean(r.crossLanguage),
+      explanation: r.explanation || '',
+      heatmap: r.heatmapData || {},
     })),
     matrix,
   };

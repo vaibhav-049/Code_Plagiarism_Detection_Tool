@@ -1,6 +1,8 @@
 let currentFiles = [];
 let sampleData = null;
 let currentLang = null;
+let currentPairs = [];
+let currentReport = null;
 
 window.showPage = function(pageId) {
     document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
@@ -156,6 +158,7 @@ document.getElementById('analyze-btn').onclick = async () => {
       '> Initializing Tokenizer...',
       '> Stripping Whitespace & Comments...',
       '> Analyzing AST Representations...',
+            '> Running Semantic Heuristics...',
       '> Computing Similarity Matrix...'
     ];
     let i = 0;
@@ -188,8 +191,10 @@ async function fetchResults(sessionId) {
 
 function renderResults(sessionId, report) {
     document.getElementById('result-session-id').innerText = "Session ID: " + sessionId;
+    currentReport = report;
     
     const { summary, pairs, suspiciousPairs, matrix, files } = report;
+    currentPairs = pairs;
     
     const formatPct = (val) => (val * 100).toFixed(1) + '%';
     
@@ -204,8 +209,11 @@ function renderResults(sessionId, report) {
         ${statCard(summary.totalFiles, 'Files')}
         ${statCard(summary.totalComparisons, 'Comparisons')}
         ${statCard(summary.suspiciousPairs, 'Suspicious', summary.suspiciousPairs > 0)}
+        ${statCard(formatPct(summary.averageLexical || 0), 'Avg Lexical')}
+        ${statCard(formatPct(summary.averageAst || 0), 'Avg AST')}
+        ${statCard(formatPct(summary.averageSemantic || 0), 'Avg Semantic')}
         ${statCard(formatPct(summary.maxSimilarity), 'Max Match', summary.maxSimilarity >= 0.6)}
-        ${statCard(formatPct(summary.averageSimilarity), 'Avg Match', false, summary.averageSimilarity >= 0.4)}
+        ${statCard(formatPct(summary.averageSimilarity), 'Avg Overall', false, summary.averageSimilarity >= 0.4)}
     `;
     
     if (suspiciousPairs.length > 0) {
@@ -216,6 +224,9 @@ function renderResults(sessionId, report) {
             tb.innerHTML += `<tr class="hover:bg-red-500/10 transition-colors">
                 <td class="p-4 font-mono font-bold text-gray-200">${p.file1}</td>
                 <td class="p-4 font-mono font-bold text-gray-200">${p.file2}</td>
+                <td class="p-4 text-center text-sm text-cyan-300 font-semibold">${formatPct(p.lexical || 0)}</td>
+                <td class="p-4 text-center text-sm text-purple-300 font-semibold">${formatPct(p.ast || 0)}</td>
+                <td class="p-4 text-center text-sm text-emerald-300 font-semibold">${formatPct(p.semantic || 0)}</td>
                 <td class="p-4 font-black font-mono text-right text-red-500 drop-shadow-[0_0_8px_red] text-lg">${formatPct(p.overall)}</td>
             </tr>`;
         });
@@ -225,7 +236,7 @@ function renderResults(sessionId, report) {
     
     const allTb = document.querySelector('#all-pairs-table tbody');
     allTb.innerHTML = '';
-    pairs.forEach(p => {
+    pairs.forEach((p, idx) => {
         let scoreCls = 'score-low';
         let badge = '<span class="status-badge-ok px-3 py-1 rounded-full text-[10px] font-black tracking-widest">CLEAN</span>';
         if(p.overall >= 0.6) {
@@ -237,13 +248,20 @@ function renderResults(sessionId, report) {
           badge = '<span class="bg-yellow-900/30 text-yellow-500 border border-yellow-700/50 px-3 py-1 rounded-full text-[10px] font-black tracking-widest">WARNING</span>';
         }
         
-        allTb.innerHTML += `<tr class="hover:bg-white/[0.02] transition-colors">
+        allTb.innerHTML += `<tr class="hover:bg-white/[0.02] transition-colors cursor-pointer" onclick="showPairExplain(${idx})">
             <td class="p-4 font-mono text-gray-300 font-medium">${p.file1}</td>
             <td class="p-4 font-mono text-gray-300 font-medium">${p.file2}</td>
+            <td class="p-4 text-center text-sm text-cyan-300 font-semibold">${formatPct(p.lexical || 0)}</td>
+            <td class="p-4 text-center text-sm text-purple-300 font-semibold">${formatPct(p.ast || 0)}</td>
+            <td class="p-4 text-center text-sm text-emerald-300 font-semibold">${formatPct(p.semantic || 0)}</td>
             <td class="p-4 text-center text-base ${scoreCls}">${formatPct(p.overall)}</td>
             <td class="p-4 text-center">${badge}</td>
         </tr>`;
     });
+
+    if (pairs.length > 0) {
+        showPairExplain(0);
+    }
 
     // Render Matrix
     const fileNames = files.map(f => f.name);
@@ -277,5 +295,109 @@ function renderResults(sessionId, report) {
     
     showPage('results');
 }
+
+window.showPairExplain = function(index) {
+        const panel = document.getElementById('explain-panel');
+        const pair = currentPairs[index];
+        if (!pair || !panel) return;
+
+        const keywords = pair.heatmap?.sharedKeywords || [];
+        const operators = pair.heatmap?.sharedOperators || [];
+        const ngrams = pair.heatmap?.sharedNgrams || [];
+        const flowOverlapValue = pair.heatmap?.controlFlowOverlap || 0;
+
+        const renderChips = (items, chipClass) => {
+            if (!items || items.length === 0) return '<span class="text-gray-500">None</span>';
+            return items.map(item => {
+                const safeValue = String(item.value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                return `<span class="heatmap-chip ${chipClass}">${safeValue} <span class="heatmap-chip-count">x${item.strength}</span></span>`;
+            }).join('');
+        };
+
+        const renderBar = (label, value, barClass) => {
+            const clamped = Math.max(0, Math.min(1, value || 0));
+            const pct = (clamped * 100).toFixed(1);
+            return `
+                <div class="space-y-1">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-400">${label}</span>
+                        <span class="font-mono text-gray-200">${pct}%</span>
+                    </div>
+                    <div class="heatmap-bar-track">
+                        <div class="heatmap-bar-fill ${barClass}" style="width: ${pct}%"></div>
+                    </div>
+                </div>
+            `;
+        };
+
+        panel.innerHTML = `
+            <div class="space-y-4">
+                <div>
+                    <p class="text-cyan-300 font-semibold">${pair.file1} ↔ ${pair.file2}</p>
+                    <p class="text-sm text-gray-300 mt-1"><span class="text-gray-400">Reason:</span> ${pair.explanation || 'No explanation available.'}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    ${renderBar('Lexical overlap', pair.lexical || 0, 'heatmap-lexical')}
+                    ${renderBar('AST overlap', pair.ast || 0, 'heatmap-ast')}
+                    ${renderBar('Semantic overlap', pair.semantic || 0, 'heatmap-semantic')}
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-xs uppercase tracking-wider text-gray-400">Top shared keywords</p>
+                    <div class="heatmap-chip-wrap">${renderChips(keywords, 'heatmap-chip-keyword')}</div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-xs uppercase tracking-wider text-gray-400">Top shared operators</p>
+                    <div class="heatmap-chip-wrap">${renderChips(operators, 'heatmap-chip-operator')}</div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-xs uppercase tracking-wider text-gray-400">Token pattern preview (shared n-grams)</p>
+                    <div class="heatmap-chip-wrap">${renderChips(ngrams, 'heatmap-chip-ngram')}</div>
+                </div>
+
+                <div class="text-sm text-gray-300">
+                    <span class="text-gray-400">Control-flow overlap:</span>
+                    <span class="font-mono text-white"> ${(flowOverlapValue * 100).toFixed(1)}%</span>
+                </div>
+            </div>
+        `;
+};
+
+window.exportExplainabilityReport = function() {
+    if (!currentReport) return;
+
+    const payload = {
+        generatedAt: new Date().toISOString(),
+        summary: currentReport.summary,
+        pairs: (currentReport.pairs || []).map(p => ({
+            file1: p.file1,
+            file2: p.file2,
+            lexical: p.lexical,
+            ast: p.ast,
+            semantic: p.semantic,
+            overall: p.overall,
+            suspicious: p.suspicious,
+            crossLanguage: p.crossLanguage,
+            explanation: p.explanation,
+            heatmap: p.heatmap,
+        })),
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `phase2_explainability_${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
 
 showPage('home');

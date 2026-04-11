@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 const { acceptedExtensions } = require('../utils/languageDetector');
+const { getAllSamples, getSamplesByLanguage } = require('../services/sampleLoader');
 const {
   uploadAndAnalyze,
   getResults,
@@ -61,15 +62,15 @@ router.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-const samples = require('../data/sampleCodes');
 router.get('/samples', (_req, res) => {
-  res.json(samples);
+  res.json(getAllSamples());
 });
 
 router.get('/samples/:language', (req, res) => {
   const lang = req.params.language.toLowerCase();
-  if (samples[lang]) {
-    res.json(samples[lang]);
+  const samples = getSamplesByLanguage(lang);
+  if (samples) {
+    res.json(samples);
   } else {
     res.status(404).json({ error: `No samples for language: ${lang}` });
   }

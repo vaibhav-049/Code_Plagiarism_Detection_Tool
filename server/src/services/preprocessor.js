@@ -104,6 +104,13 @@ function normalizeWhitespace(code) {
     .join('\n');
 }
 
+function normalizePythonWhitespace(code) {
+  return code
+    .split('\n')
+    .map(line => line.replace(/\t/g, '    ').replace(/\s+$/g, ''))
+    .join('\n');
+}
+
 
 function preprocess(code, language) {
   let processed = code;
@@ -130,7 +137,11 @@ function preprocess(code, language) {
   }
 
   processed = removeBlankLines(processed);
-  processed = normalizeWhitespace(processed);
+  if (language.toLowerCase() === 'python') {
+    processed = normalizePythonWhitespace(processed);
+  } else {
+    processed = normalizeWhitespace(processed);
+  }
 
   return processed;
 }
@@ -142,4 +153,5 @@ module.exports = {
   removePythonDocstrings,
   removeBlankLines,
   normalizeWhitespace,
+  normalizePythonWhitespace,
 };

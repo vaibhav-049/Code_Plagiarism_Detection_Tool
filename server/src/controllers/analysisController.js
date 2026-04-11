@@ -87,16 +87,25 @@ async function uploadAndAnalyze(req, res) {
         match.file2Name,
         match.lexicalScore,
         match.astScore || 0,
-        0, // Semantic placeholder
+        match.semanticScore || 0,
         match.overallScore,
         match.isSuspicious ? 1 : 0,
         match.crossLanguage ? 1 : 0,
-        JSON.stringify({ heatmap: [] })
+        JSON.stringify({
+          explanation: match.explanation || '',
+          heatmap: match.heatmapData || {},
+        })
       );
     }
     
     const files = db.getFilesBySession.all(sessionId);
-    const report = generateReport(sessionId, files, matches);
+    const fileMetaMap = fileEntries.reduce((acc, item) => {
+      acc[item.name] = {
+        parserSource: item.astMeta?.parserSource || 'unknown',
+      };
+      return acc;
+    }, {});
+    const report = generateReport(sessionId, files, matches, fileMetaMap);
     db.insertReport.run(sessionId, JSON.stringify(report));
     db.updateSessionStatus.run('completed', sessionId);
     for (const file of req.files) {

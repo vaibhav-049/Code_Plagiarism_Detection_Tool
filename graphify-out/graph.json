@@ -1,0 +1,1430 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "graphify_pipeline.py",
+      "file_type": "code",
+      "source_file": "graphify_pipeline.py",
+      "source_location": "L1",
+      "id": "graphify_pipeline",
+      "community": 12
+    },
+    {
+      "label": "app.js",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L1",
+      "id": "app",
+      "community": 0
+    },
+    {
+      "label": "fetchSamples()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L13",
+      "id": "app_fetchsamples",
+      "community": 0
+    },
+    {
+      "label": "renderSampleButtons()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L23",
+      "id": "app_rendersamplebuttons",
+      "community": 0
+    },
+    {
+      "label": "toggleLang()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L35",
+      "id": "app_togglelang",
+      "community": 0
+    },
+    {
+      "label": "renderSampleFiles()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L59",
+      "id": "app_rendersamplefiles",
+      "community": 0
+    },
+    {
+      "label": "loadSampleFile()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L89",
+      "id": "app_loadsamplefile",
+      "community": 0
+    },
+    {
+      "label": "addFiles()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L110",
+      "id": "app_addfiles",
+      "community": 0
+    },
+    {
+      "label": "updateFileList()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L119",
+      "id": "app_updatefilelist",
+      "community": 0
+    },
+    {
+      "label": "fetchResults()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L179",
+      "id": "app_fetchresults",
+      "community": 0
+    },
+    {
+      "label": "renderResults()",
+      "file_type": "code",
+      "source_file": "client\\app.js",
+      "source_location": "L189",
+      "id": "app_renderresults",
+      "community": 0
+    },
+    {
+      "label": "vite.config.js",
+      "file_type": "code",
+      "source_file": "client\\vite.config.js",
+      "source_location": "L1",
+      "id": "vite_config",
+      "community": 13
+    },
+    {
+      "label": "index.js",
+      "file_type": "code",
+      "source_file": "server\\src\\index.js",
+      "source_location": "L1",
+      "id": "index",
+      "community": 14
+    },
+    {
+      "label": "analysisController.js",
+      "file_type": "code",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L1",
+      "id": "analysiscontroller",
+      "community": 2
+    },
+    {
+      "label": "isValidSessionId()",
+      "file_type": "code",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L15",
+      "id": "analysiscontroller_isvalidsessionid",
+      "community": 2
+    },
+    {
+      "label": "sanitizeFilename()",
+      "file_type": "code",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L18",
+      "id": "analysiscontroller_sanitizefilename",
+      "community": 2
+    },
+    {
+      "label": "uploadAndAnalyze()",
+      "file_type": "code",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L23",
+      "id": "analysiscontroller_uploadandanalyze",
+      "community": 2
+    },
+    {
+      "label": "getResults()",
+      "file_type": "code",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L119",
+      "id": "analysiscontroller_getresults",
+      "community": 2
+    },
+    {
+      "label": "getReport()",
+      "file_type": "code",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L143",
+      "id": "analysiscontroller_getreport",
+      "community": 2
+    },
+    {
+      "label": "deleteSession()",
+      "file_type": "code",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L161",
+      "id": "analysiscontroller_deletesession",
+      "community": 2
+    },
+    {
+      "label": "sampleCodes.js",
+      "file_type": "code",
+      "source_file": "server\\src\\data\\sampleCodes.js",
+      "source_location": "L1",
+      "id": "samplecodes",
+      "community": 15
+    },
+    {
+      "label": "database.js",
+      "file_type": "code",
+      "source_file": "server\\src\\db\\database.js",
+      "source_location": "L1",
+      "id": "database",
+      "community": 16
+    },
+    {
+      "label": "api.js",
+      "file_type": "code",
+      "source_file": "server\\src\\routes\\api.js",
+      "source_location": "L1",
+      "id": "api",
+      "community": 8
+    },
+    {
+      "label": "fileFilter()",
+      "file_type": "code",
+      "source_file": "server\\src\\routes\\api.js",
+      "source_location": "L41",
+      "id": "api_filefilter",
+      "community": 8
+    },
+    {
+      "label": "astParser.js",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L1",
+      "id": "astparser",
+      "community": 3
+    },
+    {
+      "label": "buildAST()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L8",
+      "id": "astparser_buildast",
+      "community": 3
+    },
+    {
+      "label": "extractAstMetadata()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L58",
+      "id": "astparser_extractastmetadata",
+      "community": 3
+    },
+    {
+      "label": "countMap()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L89",
+      "id": "astparser_countmap",
+      "community": 3
+    },
+    {
+      "label": "multisetJaccard()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L97",
+      "id": "astparser_multisetjaccard",
+      "community": 3
+    },
+    {
+      "label": "ratioSimilarity()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L117",
+      "id": "astparser_ratiosimilarity",
+      "community": 3
+    },
+    {
+      "label": "calculateASTSimilarity()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L127",
+      "id": "astparser_calculateastsimilarity",
+      "community": 3
+    },
+    {
+      "label": "normalizer.js",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L1",
+      "id": "normalizer",
+      "community": 5
+    },
+    {
+      "label": "normalizeTokens()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L6",
+      "id": "normalizer_normalizetokens",
+      "community": 5
+    },
+    {
+      "label": "tokensToFingerprint()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L39",
+      "id": "normalizer_tokenstofingerprint",
+      "community": 5
+    },
+    {
+      "label": "buildNgrams()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L44",
+      "id": "normalizer_buildngrams",
+      "community": 5
+    },
+    {
+      "label": "buildFrequencyMap()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L54",
+      "id": "normalizer_buildfrequencymap",
+      "community": 5
+    },
+    {
+      "label": "preprocessor.js",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L1",
+      "id": "preprocessor",
+      "community": 4
+    },
+    {
+      "label": "removeSingleLineComments()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L4",
+      "id": "preprocessor_removesinglelinecomments",
+      "community": 4
+    },
+    {
+      "label": "removeCMultiLineComments()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L28",
+      "id": "preprocessor_removecmultilinecomments",
+      "community": 4
+    },
+    {
+      "label": "removePythonDocstrings()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L67",
+      "id": "preprocessor_removepythondocstrings",
+      "community": 4
+    },
+    {
+      "label": "removeBlankLines()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L91",
+      "id": "preprocessor_removeblanklines",
+      "community": 4
+    },
+    {
+      "label": "normalizeWhitespace()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L100",
+      "id": "preprocessor_normalizewhitespace",
+      "community": 4
+    },
+    {
+      "label": "preprocess()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L108",
+      "id": "preprocessor_preprocess",
+      "community": 4
+    },
+    {
+      "label": "reportGenerator.js",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\reportGenerator.js",
+      "source_location": "L1",
+      "id": "reportgenerator",
+      "community": 9
+    },
+    {
+      "label": "generateReport()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\reportGenerator.js",
+      "source_location": "L6",
+      "id": "reportgenerator_generatereport",
+      "community": 9
+    },
+    {
+      "label": "similarity.js",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L1",
+      "id": "similarity",
+      "community": 1
+    },
+    {
+      "label": "jaccardSimilarity()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L8",
+      "id": "similarity_jaccardsimilarity",
+      "community": 1
+    },
+    {
+      "label": "cosineSimilarity()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L26",
+      "id": "similarity_cosinesimilarity",
+      "community": 1
+    },
+    {
+      "label": "lcsLength()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L53",
+      "id": "similarity_lcslength",
+      "community": 1
+    },
+    {
+      "label": "lcsLengthSampled()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L83",
+      "id": "similarity_lcslengthsampled",
+      "community": 1
+    },
+    {
+      "label": "lcsLengthSmall()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L97",
+      "id": "similarity_lcslengthsmall",
+      "community": 1
+    },
+    {
+      "label": "lcsSimilarity()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L114",
+      "id": "similarity_lcssimilarity",
+      "community": 1
+    },
+    {
+      "label": "comparePair()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L134",
+      "id": "similarity_comparepair",
+      "community": 1
+    },
+    {
+      "label": "compareAll()",
+      "file_type": "code",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L174",
+      "id": "similarity_compareall",
+      "community": 1
+    },
+    {
+      "label": "languageDetector.js",
+      "file_type": "code",
+      "source_file": "server\\src\\utils\\languageDetector.js",
+      "source_location": "L1",
+      "id": "languagedetector",
+      "community": 6
+    },
+    {
+      "label": "detectLanguage()",
+      "file_type": "code",
+      "source_file": "server\\src\\utils\\languageDetector.js",
+      "source_location": "L21",
+      "id": "languagedetector_detectlanguage",
+      "community": 6
+    },
+    {
+      "label": "isSupported()",
+      "file_type": "code",
+      "source_file": "server\\src\\utils\\languageDetector.js",
+      "source_location": "L27",
+      "id": "languagedetector_issupported",
+      "community": 6
+    },
+    {
+      "label": "acceptedExtensions()",
+      "file_type": "code",
+      "source_file": "server\\src\\utils\\languageDetector.js",
+      "source_location": "L32",
+      "id": "languagedetector_acceptedextensions",
+      "community": 6
+    },
+    {
+      "label": "copied_renamed.c",
+      "file_type": "code",
+      "source_file": "test-files\\copied_renamed.c",
+      "source_location": "L1",
+      "id": "copied_renamed",
+      "community": 10
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "test-files\\copied_renamed.c",
+      "source_location": "L4",
+      "id": "copied_renamed_main",
+      "community": 10
+    },
+    {
+      "label": "different.c",
+      "file_type": "code",
+      "source_file": "test-files\\different.c",
+      "source_location": "L1",
+      "id": "different",
+      "community": 7
+    },
+    {
+      "label": "calculate_area()",
+      "file_type": "code",
+      "source_file": "test-files\\different.c",
+      "source_location": "L4",
+      "id": "different_calculate_area",
+      "community": 7
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "test-files\\different.c",
+      "source_location": "L8",
+      "id": "different_main",
+      "community": 7
+    },
+    {
+      "label": "original.c",
+      "file_type": "code",
+      "source_file": "test-files\\original.c",
+      "source_location": "L1",
+      "id": "original",
+      "community": 11
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "test-files\\original.c",
+      "source_location": "L3",
+      "id": "original_main",
+      "community": 11
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_fetchsamples",
+      "source": "app",
+      "target": "app_fetchsamples",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_rendersamplebuttons",
+      "source": "app",
+      "target": "app_rendersamplebuttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_togglelang",
+      "source": "app",
+      "target": "app_togglelang",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_rendersamplefiles",
+      "source": "app",
+      "target": "app_rendersamplefiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_loadsamplefile",
+      "source": "app",
+      "target": "app_loadsamplefile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L110",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_addfiles",
+      "source": "app",
+      "target": "app_addfiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_updatefilelist",
+      "source": "app",
+      "target": "app_updatefilelist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L179",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_fetchresults",
+      "source": "app",
+      "target": "app_fetchresults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L189",
+      "weight": 1.0,
+      "_src": "app",
+      "_tgt": "app_renderresults",
+      "source": "app",
+      "target": "app_renderresults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_src": "app_fetchsamples",
+      "_tgt": "app_rendersamplebuttons",
+      "source": "app_fetchsamples",
+      "target": "app_rendersamplebuttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_src": "app_togglelang",
+      "_tgt": "app_rendersamplefiles",
+      "source": "app_togglelang",
+      "target": "app_rendersamplefiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L94",
+      "weight": 1.0,
+      "_src": "app_loadsamplefile",
+      "_tgt": "app_updatefilelist",
+      "source": "app_loadsamplefile",
+      "target": "app_updatefilelist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_src": "app_addfiles",
+      "_tgt": "app_updatefilelist",
+      "source": "app_addfiles",
+      "target": "app_updatefilelist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "client\\app.js",
+      "source_location": "L182",
+      "weight": 1.0,
+      "_src": "app_fetchresults",
+      "_tgt": "app_renderresults",
+      "source": "app_fetchresults",
+      "target": "app_renderresults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "analysiscontroller",
+      "_tgt": "analysiscontroller_isvalidsessionid",
+      "source": "analysiscontroller",
+      "target": "analysiscontroller_isvalidsessionid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "analysiscontroller",
+      "_tgt": "analysiscontroller_sanitizefilename",
+      "source": "analysiscontroller",
+      "target": "analysiscontroller_sanitizefilename",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_src": "analysiscontroller",
+      "_tgt": "analysiscontroller_uploadandanalyze",
+      "source": "analysiscontroller",
+      "target": "analysiscontroller_uploadandanalyze",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_src": "analysiscontroller",
+      "_tgt": "analysiscontroller_getresults",
+      "source": "analysiscontroller",
+      "target": "analysiscontroller_getresults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L143",
+      "weight": 1.0,
+      "_src": "analysiscontroller",
+      "_tgt": "analysiscontroller_getreport",
+      "source": "analysiscontroller",
+      "target": "analysiscontroller_getreport",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_src": "analysiscontroller",
+      "_tgt": "analysiscontroller_deletesession",
+      "source": "analysiscontroller",
+      "target": "analysiscontroller_deletesession",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L122",
+      "weight": 1.0,
+      "_src": "analysiscontroller_getresults",
+      "_tgt": "analysiscontroller_isvalidsessionid",
+      "source": "analysiscontroller_isvalidsessionid",
+      "target": "analysiscontroller_getresults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L146",
+      "weight": 1.0,
+      "_src": "analysiscontroller_getreport",
+      "_tgt": "analysiscontroller_isvalidsessionid",
+      "source": "analysiscontroller_isvalidsessionid",
+      "target": "analysiscontroller_getreport",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L164",
+      "weight": 1.0,
+      "_src": "analysiscontroller_deletesession",
+      "_tgt": "analysiscontroller_isvalidsessionid",
+      "source": "analysiscontroller_isvalidsessionid",
+      "target": "analysiscontroller_deletesession",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\controllers\\analysisController.js",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_src": "analysiscontroller_uploadandanalyze",
+      "_tgt": "analysiscontroller_sanitizefilename",
+      "source": "analysiscontroller_sanitizefilename",
+      "target": "analysiscontroller_uploadandanalyze",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\routes\\api.js",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_src": "api",
+      "_tgt": "api_filefilter",
+      "source": "api",
+      "target": "api_filefilter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "astparser",
+      "_tgt": "astparser_buildast",
+      "source": "astparser",
+      "target": "astparser_buildast",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_src": "astparser",
+      "_tgt": "astparser_extractastmetadata",
+      "source": "astparser",
+      "target": "astparser_extractastmetadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_src": "astparser",
+      "_tgt": "astparser_countmap",
+      "source": "astparser",
+      "target": "astparser_countmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_src": "astparser",
+      "_tgt": "astparser_multisetjaccard",
+      "source": "astparser",
+      "target": "astparser_multisetjaccard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_src": "astparser",
+      "_tgt": "astparser_ratiosimilarity",
+      "source": "astparser",
+      "target": "astparser_ratiosimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_src": "astparser",
+      "_tgt": "astparser_calculateastsimilarity",
+      "source": "astparser",
+      "target": "astparser_calculateastsimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_src": "astparser_buildast",
+      "_tgt": "astparser_extractastmetadata",
+      "source": "astparser_buildast",
+      "target": "astparser_extractastmetadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L128",
+      "weight": 1.0,
+      "_src": "astparser_calculateastsimilarity",
+      "_tgt": "astparser_extractastmetadata",
+      "source": "astparser_extractastmetadata",
+      "target": "astparser_calculateastsimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_src": "astparser_multisetjaccard",
+      "_tgt": "astparser_countmap",
+      "source": "astparser_countmap",
+      "target": "astparser_multisetjaccard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L131",
+      "weight": 1.0,
+      "_src": "astparser_calculateastsimilarity",
+      "_tgt": "astparser_multisetjaccard",
+      "source": "astparser_multisetjaccard",
+      "target": "astparser_calculateastsimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\astParser.js",
+      "source_location": "L132",
+      "weight": 1.0,
+      "_src": "astparser_calculateastsimilarity",
+      "_tgt": "astparser_ratiosimilarity",
+      "source": "astparser_ratiosimilarity",
+      "target": "astparser_calculateastsimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_src": "normalizer",
+      "_tgt": "normalizer_normalizetokens",
+      "source": "normalizer",
+      "target": "normalizer_normalizetokens",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_src": "normalizer",
+      "_tgt": "normalizer_tokenstofingerprint",
+      "source": "normalizer",
+      "target": "normalizer_tokenstofingerprint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_src": "normalizer",
+      "_tgt": "normalizer_buildngrams",
+      "source": "normalizer",
+      "target": "normalizer_buildngrams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\normalizer.js",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_src": "normalizer",
+      "_tgt": "normalizer_buildfrequencymap",
+      "source": "normalizer",
+      "target": "normalizer_buildfrequencymap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_src": "preprocessor",
+      "_tgt": "preprocessor_removesinglelinecomments",
+      "source": "preprocessor",
+      "target": "preprocessor_removesinglelinecomments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_src": "preprocessor",
+      "_tgt": "preprocessor_removecmultilinecomments",
+      "source": "preprocessor",
+      "target": "preprocessor_removecmultilinecomments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_src": "preprocessor",
+      "_tgt": "preprocessor_removepythondocstrings",
+      "source": "preprocessor",
+      "target": "preprocessor_removepythondocstrings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_src": "preprocessor",
+      "_tgt": "preprocessor_removeblanklines",
+      "source": "preprocessor",
+      "target": "preprocessor_removeblanklines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L100",
+      "weight": 1.0,
+      "_src": "preprocessor",
+      "_tgt": "preprocessor_normalizewhitespace",
+      "source": "preprocessor",
+      "target": "preprocessor_normalizewhitespace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_src": "preprocessor",
+      "_tgt": "preprocessor_preprocess",
+      "source": "preprocessor",
+      "target": "preprocessor_preprocess",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_src": "preprocessor_preprocess",
+      "_tgt": "preprocessor_removesinglelinecomments",
+      "source": "preprocessor_removesinglelinecomments",
+      "target": "preprocessor_preprocess",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_src": "preprocessor_preprocess",
+      "_tgt": "preprocessor_removecmultilinecomments",
+      "source": "preprocessor_removecmultilinecomments",
+      "target": "preprocessor_preprocess",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_src": "preprocessor_preprocess",
+      "_tgt": "preprocessor_removepythondocstrings",
+      "source": "preprocessor_removepythondocstrings",
+      "target": "preprocessor_preprocess",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L132",
+      "weight": 1.0,
+      "_src": "preprocessor_preprocess",
+      "_tgt": "preprocessor_removeblanklines",
+      "source": "preprocessor_removeblanklines",
+      "target": "preprocessor_preprocess",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\preprocessor.js",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_src": "preprocessor_preprocess",
+      "_tgt": "preprocessor_normalizewhitespace",
+      "source": "preprocessor_normalizewhitespace",
+      "target": "preprocessor_preprocess",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\reportGenerator.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_src": "reportgenerator",
+      "_tgt": "reportgenerator_generatereport",
+      "source": "reportgenerator",
+      "target": "reportgenerator_generatereport",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "similarity",
+      "_tgt": "similarity_jaccardsimilarity",
+      "source": "similarity",
+      "target": "similarity_jaccardsimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_src": "similarity",
+      "_tgt": "similarity_cosinesimilarity",
+      "source": "similarity",
+      "target": "similarity_cosinesimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_src": "similarity",
+      "_tgt": "similarity_lcslength",
+      "source": "similarity",
+      "target": "similarity_lcslength",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_src": "similarity",
+      "_tgt": "similarity_lcslengthsampled",
+      "source": "similarity",
+      "target": "similarity_lcslengthsampled",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_src": "similarity",
+      "_tgt": "similarity_lcslengthsmall",
+      "source": "similarity",
+      "target": "similarity_lcslengthsmall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L114",
+      "weight": 1.0,
+      "_src": "similarity",
+      "_tgt": "similarity_lcssimilarity",
+      "source": "similarity",
+      "target": "similarity_lcssimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L134",
+      "weight": 1.0,
+      "_src": "similarity",
+      "_tgt": "similarity_comparepair",
+      "source": "similarity",
+      "target": "similarity_comparepair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L174",
+      "weight": 1.0,
+      "_src": "similarity",
+      "_tgt": "similarity_compareall",
+      "source": "similarity",
+      "target": "similarity_compareall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L135",
+      "weight": 1.0,
+      "_src": "similarity_comparepair",
+      "_tgt": "similarity_jaccardsimilarity",
+      "source": "similarity_jaccardsimilarity",
+      "target": "similarity_comparepair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_src": "similarity_comparepair",
+      "_tgt": "similarity_cosinesimilarity",
+      "source": "similarity_cosinesimilarity",
+      "target": "similarity_comparepair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_src": "similarity_lcslength",
+      "_tgt": "similarity_lcslengthsampled",
+      "source": "similarity_lcslength",
+      "target": "similarity_lcslengthsampled",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_src": "similarity_lcssimilarity",
+      "_tgt": "similarity_lcslength",
+      "source": "similarity_lcslength",
+      "target": "similarity_lcssimilarity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_src": "similarity_lcslengthsampled",
+      "_tgt": "similarity_lcslengthsmall",
+      "source": "similarity_lcslengthsampled",
+      "target": "similarity_lcslengthsmall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_src": "similarity_comparepair",
+      "_tgt": "similarity_lcssimilarity",
+      "source": "similarity_lcssimilarity",
+      "target": "similarity_comparepair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\services\\similarity.js",
+      "source_location": "L178",
+      "weight": 1.0,
+      "_src": "similarity_compareall",
+      "_tgt": "similarity_comparepair",
+      "source": "similarity_comparepair",
+      "target": "similarity_compareall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\utils\\languageDetector.js",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "languagedetector",
+      "_tgt": "languagedetector_detectlanguage",
+      "source": "languagedetector",
+      "target": "languagedetector_detectlanguage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\utils\\languageDetector.js",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_src": "languagedetector",
+      "_tgt": "languagedetector_issupported",
+      "source": "languagedetector",
+      "target": "languagedetector_issupported",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server\\src\\utils\\languageDetector.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_src": "languagedetector",
+      "_tgt": "languagedetector_acceptedextensions",
+      "source": "languagedetector",
+      "target": "languagedetector_acceptedextensions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test-files\\copied_renamed.c",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_src": "copied_renamed",
+      "_tgt": "copied_renamed_main",
+      "source": "copied_renamed",
+      "target": "copied_renamed_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test-files\\different.c",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_src": "different",
+      "_tgt": "different_calculate_area",
+      "source": "different",
+      "target": "different_calculate_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test-files\\different.c",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "different",
+      "_tgt": "different_main",
+      "source": "different",
+      "target": "different_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "test-files\\different.c",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "different_main",
+      "_tgt": "different_calculate_area",
+      "source": "different_calculate_area",
+      "target": "different_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test-files\\original.c",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_src": "original",
+      "_tgt": "original_main",
+      "source": "original",
+      "target": "original_main",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}
